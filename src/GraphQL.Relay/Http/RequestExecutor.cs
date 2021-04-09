@@ -23,14 +23,14 @@ namespace GraphQL.Relay.Http
             _writer = writer;
         }
 
-        public async Task<RelayResponse> ExecuteAsync(
-            Stream body,
-            string contentType,
-            Action<GraphQL.ExecutionOptions, IEnumerable<HttpFile>> configure
-        )
+        /// <summary>
+        /// This method is currently used by Soft.Framework
+        /// </summary>
+        /// <param name="queries"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public async Task<RelayResponse> ExecuteAsync(RelayRequest queries, Action<ExecutionOptions, IEnumerable<HttpFile>> configure)
         {
-            var queries = await Deserializer.Deserialize(body, contentType);
-
             var results = await Task.WhenAll(
                 queries.Select(q => _executer.ExecuteAsync(options =>
                 {
@@ -48,19 +48,6 @@ namespace GraphQL.Relay.Http
                 IsBatched = queries.IsBatched,
                 Results = results
             };
-        }
-
-
-        public async Task<RelayResponse> ExecuteAsync(
-            HttpRequestMessage request,
-            Action<GraphQL.ExecutionOptions, IEnumerable<HttpFile>> configure
-        )
-        {
-            return await ExecuteAsync(
-                await request.Content.ReadAsStreamAsync(),
-                request.Content.Headers.ContentType.MediaType,
-                configure
-            );
         }
     }
 }
