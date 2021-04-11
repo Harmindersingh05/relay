@@ -44,36 +44,36 @@ namespace GraphQL.Relay.Todo
                 app.UseDeveloperExceptionPage();
             }
 
-            app
-                .UseStaticFiles()
-                .UseDefaultFiles()
-                .UseRouter(
-                    new RouteBuilder(app)
-                        .MapPost("graphql", async context =>
-                        {
-                            var executor = context.RequestServices.GetService<RequestExecutor>();
-                            try
-                            {
-                                var resp = await executor.ExecuteAsync(
-                                    context.Request.Body,
-                                    context.Request.ContentType,
-                                    (_, files) =>
-                                    {
-                                        _.Schema = new TodoSchema();
-                                        //_.FieldNameConverter = new CamelCaseFieldNameConverter();
-                                    }
-                                );
+            //app
+            //    .UseStaticFiles()
+            //    .UseDefaultFiles()
+            //    .UseRouter(
+            //        new RouteBuilder(app)
+            //            .MapPost("graphql", async context =>
+            //            {
+            //                var executor = context.RequestServices.GetService<RequestExecutor>();
+            //                try
+            //                {
+            //                    //var resp = await executor.ExecuteAsync(
+            //                    //    context.Request.Body,
+            //                    //    context.Request.ContentType,
+            //                    //    (_, files) =>
+            //                    //    {
+            //                    //        _.Schema = new TodoSchema();
+            //                    //        //_.FieldNameConverter = new CamelCaseFieldNameConverter();
+            //                    //    }
+            //                    //);
 
-                                await context.Response.WriteAsync(await resp.Write());
+            //                   // await context.Response.WriteAsync(await resp.Write());
 
-                            }
-                            catch (Exception err)
-                            {
-                                throw err;
-                            }
-                        })
-                        .Build()
-                );
+            //                }
+            //                catch (Exception err)
+            //                {
+            //                    throw err;
+            //                }
+            //            })
+            //            .Build()
+            //    );
         }
     }
 }
